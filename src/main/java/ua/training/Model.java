@@ -5,25 +5,34 @@ import java.util.ArrayList;
 
 public class Model {
 
+    private int minRange;
+    private int maxRange;
+
+    private int secretNumber;
+
     private ArrayList<Integer> arrayList = new ArrayList<>();
 
-    private static final int RAND_MAX = 100;
 
-    public int rand(int min, int max) {
-        return (int) (Math.random() * (max - min + 1) + min);
+    public int getSecretNumber() { return secretNumber; }
+
+    public int getMinRange() { return minRange; }
+
+    public int getMaxRange() { return maxRange; }
+
+    public void setMinAndMaxRange(int minRange, int maxRange) {
+        this.minRange = minRange;
+        this.maxRange = maxRange;
     }
 
-    public int rand() {
-        return (int) (Math.random() * (RAND_MAX + 1));
+    public void rand() {
+        secretNumber =  (int) (Math.random() * (maxRange - minRange + 1) + minRange);
     }
 
     public void addNumber(int number) {
         arrayList.add(number);
     }
 
-    public ArrayList<Integer> getStatistic() {
-        return this.arrayList;
-    }
+    public ArrayList<Integer> getStatistic() { return this.arrayList; }
 
     public boolean checkNotEqual(int randNumber, int userNumber) {
         return randNumber != userNumber;
