@@ -5,11 +5,9 @@ import java.util.Scanner;
 
 public class Controller {
 
-    public static final int MIN_RANGE = 0;
-    public static final int MAX_RANGE = 10;
 
-    Model model;
-    View view;
+    private Model model;
+    private View view;
 
     public Controller(Model model, View view) {
         this.model = model;
@@ -19,22 +17,17 @@ public class Controller {
     public void processUser() {
         Scanner scanner = new Scanner(System.in);
 
-        int randNumber = model.rand(MIN_RANGE, MAX_RANGE);
+        model.setMinAndMaxRange(GlobalValues.PRIMARY_MIN_BARRIER,
+                                GlobalValues.PRIMARY_MAX_BARRIER);
 
-        findRandNumber(randNumber, scanner);
+        model.rand();
 
-        view.finalResult(model.getStatistic());
+
+        findRandNumber(model.getSecretNumber(), scanner);
+
+        view.finalResult(model);
     }
 
-    private int inputIntValue(Scanner sc) {
-        System.out.print(View.INPUT_NUMBER);
-        while (!sc.hasNextInt()) {
-            System.out.println(View.WRONG_INPUT_DATA);
-            System.out.print(View.INPUT_NUMBER);
-            sc.next();
-        }
-        return sc.nextInt();
-    }
 
     private void findRandNumber(int randNumber, Scanner sc) {
         boolean value = true;
@@ -43,12 +36,22 @@ public class Controller {
             model.addNumber(userNumber);
             value = model.checkNotEqual(randNumber, userNumber);
             if (value) {
-                view.showRange(MIN_RANGE, MAX_RANGE);
-                view.showStatistic(model.getStatistic());
-                System.out.println(View.WRONG_NUMBER + userNumber);
-                System.out.println();
+                view.showRange(model);
+                view.showStatistic(model);
+                view.showWrongInputNumber(userNumber);
             }
         }
     }
+
+    private int inputIntValue(Scanner sc) {
+        view.inputData();
+        while (!sc.hasNextInt()) {
+            view.showWrongInputData();
+            sc.next();
+        }
+        return sc.nextInt();
+    }
+
+
 
 }
