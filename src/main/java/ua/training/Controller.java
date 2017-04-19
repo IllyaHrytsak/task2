@@ -1,7 +1,6 @@
 package ua.training;
 
 
-import java.util.Scanner;
 
 public class Controller {
 
@@ -15,43 +14,38 @@ public class Controller {
     }
 
     public void processUser() {
-        Scanner scanner = new Scanner(System.in);
 
         model.setMinAndMaxRange(GlobalValues.PRIMARY_MIN_BARRIER,
                                 GlobalValues.PRIMARY_MAX_BARRIER);
 
         model.rand();
 
+        int secretNumber = model.getSecretNumber();
 
-        findRandNumber(model.getSecretNumber(), scanner);
+        enumTest(secretNumber);
 
         view.finalResult(model);
     }
 
 
-    private void findRandNumber(int randNumber, Scanner sc) {
-        boolean value = true;
-        while (value) {
-            int userNumber = inputIntValue(sc);
+    private boolean findRandNumber(int randNumber, int userNumber) {
             model.addNumber(userNumber);
-            value = model.checkNotEqual(randNumber, userNumber);
+            boolean value = model.checkNotEqual(randNumber, userNumber);
             if (value) {
                 view.showRange(model);
                 view.showStatistic(model);
                 view.showWrongInputNumber(userNumber);
+                return false;
             }
-        }
+        return true;
     }
 
-    private int inputIntValue(Scanner sc) {
-        view.inputData();
-        while (!sc.hasNextInt()) {
-            view.showWrongInputData();
-            sc.next();
+    private void enumTest(int secretNumber) {
+        Number.LAST_NUMBER.setLastNumber(secretNumber);
+        for (Number number : Number.values()) {
+            boolean check = findRandNumber(secretNumber, number.getNumber());
+            if (check) return;
         }
-        return sc.nextInt();
     }
-
-
 
 }
